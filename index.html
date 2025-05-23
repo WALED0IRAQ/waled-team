@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>عرض المهام - فريق العمل</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo&display=swap');
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: #f4f7f9;
+      margin: 0;
+      padding: 20px 40px 40px 40px;
+      min-height: 100vh;
+      position: relative;
+      color: #2c3e50;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 2.5rem;
+      color: #2980b9;
+      text-shadow: 0 0 8px rgba(41, 128, 185, 0.7);
+    }
+    .login-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: #2980b9;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: 25px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(41, 128, 185, 0.7);
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      z-index: 1000;
+    }
+    .login-btn:hover {
+      background: #1c598a;
+      transform: scale(1.1);
+    }
+    .task-board {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      padding: 22px 28px;
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(41, 128, 185, 0.3);
+    }
+    .card h3 {
+      margin-top: 0;
+      color: #2980b9;
+      font-size: 1.35rem;
+      margin-bottom: 14px;
+      text-shadow: 0 0 4px rgba(41, 128, 185, 0.6);
+    }
+    .status {
+      padding: 8px 18px;
+      border-radius: 22px;
+      font-weight: 700;
+      color: white;
+      display: inline-block;
+      user-select: none;
+      min-width: 95px;
+      text-align: center;
+      letter-spacing: 0.9px;
+      text-transform: uppercase;
+      box-shadow: 0 0 15px rgba(255 255 255 / 0.7);
+      animation: pulse 2.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 0 15px rgba(255 255 255 / 0.7);
+      }
+      50% {
+        box-shadow: 0 0 30px rgba(255 255 255 / 1);
+      }
+    }
+    .جديدة {
+      background-color: #42a5f5;
+      filter: drop-shadow(0 0 10px #42a5f5);
+    }
+    .قيد_التنفيذ {
+      background-color: #fbc02d;
+      filter: drop-shadow(0 0 10px #fbc02d);
+      color: #212121;
+      animation: pulseYellow 2.5s infinite;
+    }
+    @keyframes pulseYellow {
+      0%, 100% { filter: drop-shadow(0 0 10px #fbc02d); }
+      50% { filter: drop-shadow(0 0 20px #fbc02d); }
+    }
+    .منجزة {
+      background-color: #66bb6a;
+      filter: drop-shadow(0 0 10px #66bb6a);
+    }
+    .no-tasks {
+      text-align: center;
+      font-size: 1.4rem;
+      color: #666;
+      margin-top: 50px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+<button class="login-btn" onclick="window.location.href='login.html'">تسجيل دخول المدير</button>
+
+<h2>مهام فريق العمل</h2>
+
+<div class="task-board" id="taskBoard"></div>
+<div class="no-tasks" id="noTasks" style="display:none;">لا توجد مهام حالياً</div>
+
+<script>
+  const taskBoard = document.getElementById('taskBoard');
+  const noTasks = document.getElementById('noTasks');
+
+  const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+  if (tasks.length === 0) {
+    noTasks.style.display = 'block';
+  } else {
+    noTasks.style.display = 'none';
+    tasks.forEach(task => {
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      card.innerHTML = `
+        <h3>${task.description}</h3>
+        <p><strong>المسؤول:</strong> ${task.assignedTo}</p>
+        <div class="status ${task.status.replace(/\s/g, '_')}">${task.status}</div>
+      `;
+
+      taskBoard.appendChild(card);
+    });
+  }
+</script>
+
+</body>
+</html>
